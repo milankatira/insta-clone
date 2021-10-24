@@ -8,7 +8,7 @@ const Login = () => {
   const history = useHistory()
   
   const Logindata=()=>{
-    fetch("/signup", {
+    fetch("/signin", {
       method: "post",
       headers: {
         "Content-Type": "application/json"
