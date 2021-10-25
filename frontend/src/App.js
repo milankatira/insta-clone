@@ -1,17 +1,34 @@
+import { useEffect, createContext, useReducer,useContext } from "react";
 import "./App.css";
 import Navbar from "./components/Navbar";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom";
 import Home from "./components/screens/Home";
 import Signup from "./components/screens/Signup";
 import Login from "./components/screens/Login";
 import Profile from "./components/screens/Profile";
 import CreatePost from "./components/screens/CreatePost";
+import { reducer, initialState } from "./reducer/userReducer";
 
-function App() {
+export const UserContext = createContext()
+
+
+const Routing = () => {
+  const history = useHistory()
+  const {state,dispatch}=useContext(UserContext)
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+    // console.log(user)
+    if (user) {
+    dispatch({ type:"USER",payload: user})
+      history.push('/')
+    }
+    else {
+      history.push('/login')
+    }
+  }, [])
+
   return (
-    <BrowserRouter>
-      <Navbar />
-      
+    <Switch>
       <Route exact path="/">
         <Home />
       </Route>
@@ -27,12 +44,24 @@ function App() {
       <Route path="/profile">
         <Profile />
       </Route>
-      
+
       <Route path="/create">
         <CreatePost />
       </Route>
-      
-    </BrowserRouter>
+    </Switch>
+  )
+}
+
+function App() {
+  const [state, dispatch] = useReducer(reducer, initialState)
+  return (
+    <UserContext.Provider value={{ state, dispatch }}>
+      <BrowserRouter>
+        <Navbar />
+        <Routing />
+      </BrowserRouter>
+    </UserContext.Provider>
+
   );
 }
 

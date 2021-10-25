@@ -1,18 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import M from 'materialize-css'
 import { useHistory } from "react-router-dom";
+
 const CreatePost = () => {
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
   const [image, setImage] = useState("")
   const [url, setUrl] = useState("")
-  const history=useHistory();
-  
+  const history = useHistory();
+  useEffect(() => {
+    if (url) {
+
+      fetch("/createpost", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt")
+        },
+        body: JSON.stringify({
+          title,
+          body,
+          pic: url,
+        })
+
+      })
+        .then((res) => res.json())
+        .then(data => {
+          if (data.error) {
+            M.toast({ html: data.error, classes: "#c62828 red darker-3" })
+            console.log(data)
+          }
+          else {
+            M.toast({ html: "created post successsfully", classes: "#43a047 green darker-1" })
+            history.push('/home')
+          }
+        }).catch(err => {
+          console.log(err.message)
+        })
+    }
+  }, [url])
   const postDetail = () => {
     const data = new FormData()
     data.append('file', image)
     data.append('upload_preset', 'insta-clone')
     data.append('cloud_name', 'da5rta12e')
+
+
     fetch('https://api.cloudinary.com/v1_1/da5rta12e/image/upload', {
 
 
@@ -21,34 +54,11 @@ const CreatePost = () => {
     })
       .then(res => res.json())
       .then(data => {
+        // console.log(data.url)
         setUrl(data.url)
       })
-      .catch(error => { console.log(error) })
-      
-      fetch("/createpost", {
-        method: "post",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          title,
-          body,
-          pic:url
-        })
-  
-      })
-        .then((res) => res.json())
-        .then(data => {
-          if (data.error) {
-            M.toast({ html: data.error, classes: "#c62828 red darker-3" })
-          }
-          else {
-            M.toast({ html: "created post successsfully", classes: "#43a047 green darker-1" })
-            history.push('/home')
-          }
-        }).catch(err => {
-          console.log(err)
-        })
+      .catch(error => { console.log(error.message) })
+
   }
   return (
     <div
@@ -70,18 +80,21 @@ const CreatePost = () => {
 
       />
       <form action="#">
-        <div class="file-field input-field">
-          <div class="btn  #64b5f6 blue darken-1">
+        <div className="file-field input-field">
+          <div className="btn  #64b5f6 blue darken-1">
             <span>Upload image</span>
-            <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+            <input type="file"
+              onChange={(e) => setImage(e.target.files[0])}
+
+            />
           </div>
-          <div class="file-path-wrapper">
-            <input class="file-path validate" type="text" />
+          <div className="file-path-wrapper">
+            <input className="file-path validate" type="text" placeholder="upload image" />
           </div>
         </div>
 
         <button className="btn waves-effect waves-light #64b5f6 blue darken-1 "
-          onClick={postDetail()}
+          onClick={() => postDetail()}
         >
           submit post
         </button>

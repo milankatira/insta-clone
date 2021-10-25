@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
-const MONGO_URI="mongodb://localhost/instagram"
+const MONGO_URI='mongodb://localhost/insta'
 
 const PORT = 5000
 
