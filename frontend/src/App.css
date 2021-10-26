@@ -24,6 +24,18 @@ h2 {
   box-shadow: 0 1px solid rgb(8,93,252) !important;
 }
 
+
+.input-field input[type=email]:focus {
+  border-bottom: 1px solid rgb(8,93,252) !important;
+  box-shadow: 0 1px solid rgb(8,93,252) !important;
+}
+
+
+.input-field input[type=password]:focus {
+  border-bottom: 1px solid rgb(8,93,252) !important;
+  box-shadow: 0 1px solid rgb(8,93,252) !important;
+}
+
 .gallery{
 display:flex;
 flex-wrap:wrap;

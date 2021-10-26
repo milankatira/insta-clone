@@ -10,18 +10,18 @@ const Home = () => {
     })
       .then((res) => res.json())
       .then((res) => {
-        setData(res.post);
+        setData(res.posts);
       });
   }, []);
   return (
     <div className="home">
-      {/* {data.map((item) => {
+      {data.map((item) => {
         return (
           <div className="card home-card">
-            <h5>mk</h5>
+            {/* <h5>{item.postedBy.name}</h5> */}
             <div className="card-image">
               <img
-                src="https://images.unsplash.com/photo-1610302529432-7cab247927e0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80"
+                src="{item.photo}"
                 alt=""
               />
             </div>
@@ -30,13 +30,13 @@ const Home = () => {
                 favorite
               </i>
 
-              <h6>title</h6>
-              <p>this is amazing post</p>
+              <h6>{item.title}</h6>
+              <p>{item.body}</p>
               <input type="text" placeholder="comments" />
             </div>
           </div>
         );
-      })} */}
+      })}
 
     </div>
   );
